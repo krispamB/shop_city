@@ -1,0 +1,53 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "cockroachdb"
+  url      = env("DATABASE_URL")
+}
+
+model Shop {
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt()
+
+  email            String   @unique
+  hash             String
+  Shop_name        String
+  shop_cover_image String
+  category         Category @default(SERVICES)
+  socials          Social[]
+  is_admin         Boolean  @default(false)
+}
+
+model Social {
+  id String @id @default(uuid())
+
+  social_network String
+  social_url     String
+  shop           Shop   @relation(fields: [shop_id], references: [id], onDelete: Cascade)
+  shop_id        String
+}
+
+model Profile {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+
+  description   String
+  phone_number  String
+  shop_number   Int
+  images        String[]
+  shop_location String?
+}
+
+enum Category {
+  CATEGORY_1
+  CATEGORY_2
+  CATEGORY_3
+  SERVICES
+}
