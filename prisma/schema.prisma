@@ -17,7 +17,8 @@ model Shop {
 
   email            String   @unique
   hash             String
-  Shop_name        String
+  shop_name        String
+  shop_owner       String
   shop_cover_image String
   category         Category @default(SERVICES)
   socials          Social[]
