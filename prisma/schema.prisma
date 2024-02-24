@@ -1,7 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "rhel-openssl-1.0.x"]
@@ -24,6 +23,7 @@ model Shop {
   shop_cover_image String
   category         Category @default(SERVICES)
   socials          Social[]
+  profile          Profile?
   is_admin         Boolean  @default(false)
 }
 
@@ -46,6 +46,8 @@ model Profile {
   shop_number   Int
   images        String[]
   shop_location String?
+  shop          Shop     @relation(fields: [shop_id], references: [id], onDelete: Cascade)
+  shop_id       String   @unique
 }
 
 enum Category {
