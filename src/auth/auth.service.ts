@@ -54,25 +54,15 @@ export class AuthService {
       statusCode: 200,
       message: `user sign up successfully`,
       data: {
-        access_token: await this.signToken(
-          shopExists.id,
-          shopExists.email,
-          shopExists.is_admin,
-        ),
-        isAdmin: shopExists.is_admin,
+        access_token: await this.signToken(shopExists.id, shopExists.email),
       },
     };
   }
 
-  private async signToken(
-    id: string,
-    email: string,
-    is_admin: boolean,
-  ): Promise<string> {
+  private async signToken(id: string, email: string): Promise<string> {
     const payload = {
       sub: id,
       email,
-      is_admin,
     };
 
     const token = await this.jwt.signAsync(payload, {

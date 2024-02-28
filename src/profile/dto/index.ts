@@ -1,2 +1,2 @@
-export * from './createProfile.dto'
-export * from './editProfile.dto'
+export * from './createProfile.dto';
+export * from './editProfile.dto';
