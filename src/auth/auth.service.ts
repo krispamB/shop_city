@@ -34,7 +34,14 @@ export class AuthService {
       data: { ...dto, hash },
     });
 
-    return newShop;
+    return {
+      access_token: await this.signToken(
+        newShop.id,
+        newShop.email,
+        newShop.role,
+      ),
+      role: newShop.role,
+    };
   }
 
   async signIn(dto: SignInDto) {
@@ -54,15 +61,25 @@ export class AuthService {
       statusCode: 200,
       message: `user sign up successfully`,
       data: {
-        access_token: await this.signToken(shopExists.id, shopExists.email),
+        access_token: await this.signToken(
+          shopExists.id,
+          shopExists.email,
+          shopExists.role,
+        ),
+        role: shopExists.role,
       },
     };
   }
 
-  private async signToken(id: string, email: string): Promise<string> {
+  private async signToken(
+    id: string,
+    email: string,
+    role: string,
+  ): Promise<string> {
     const payload = {
       sub: id,
       email,
+      role,
     };
 
     const token = await this.jwt.signAsync(payload, {
