@@ -3,6 +3,7 @@ import { JwtGuard } from 'src/common/Guards';
 import { ProfileService } from './profile.service';
 import { GetUser } from 'src/common/decorators';
 import { CreateProfileDto } from './dto';
+import { Shop } from '@prisma/client';
 
 @UseGuards(JwtGuard)
 @Controller('profile')
@@ -15,7 +16,7 @@ export class ProfileController {
   }
 
   @Get()
-  getProfile(@GetUser('id') shop_id: string) {
-    return this.profileService.getProfile(shop_id);
+  getProfile(@GetUser() shop: Shop) {
+    return this.profileService.getProfile(shop);
   }
 }
