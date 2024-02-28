@@ -59,6 +59,7 @@ export class AuthService {
           shopExists.email,
           shopExists.is_admin,
         ),
+        isAdmin: shopExists.is_admin,
       },
     };
   }
