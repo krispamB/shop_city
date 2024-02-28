@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { CreateProfileDto } from './dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Profile } from '@prisma/client';
+import { Profile, Shop } from '@prisma/client';
 
 @Injectable()
 export class ProfileService {
@@ -40,17 +40,25 @@ export class ProfileService {
     };
   }
 
-  async getProfile(shop_id: string) {
+  async getProfile(shop: Shop) {
     const profile: Profile = await this.prisma.profile.findUnique({
       where: {
-        shop_id,
+        shop_id: shop.id,
       },
     });
 
+    const data = {
+      shop_owner: shop.shop_owner,
+      shop_name: shop.shop_name,
+      shop_cover_image: shop.shop_cover_image,
+      email: shop.email,
+      category: shop.category,
+      profile
+    }
     return {
       statusCode: 200,
       message: 'shop profile',
-      data: profile,
+      data,
     };
   }
 }
