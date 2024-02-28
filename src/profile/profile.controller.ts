@@ -1,9 +1,9 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, UseGuards } from '@nestjs/common';
 import { JwtGuard } from 'src/common/Guards';
 import { ProfileService } from './profile.service';
 import { GetUser } from 'src/common/decorators';
-import { CreateProfileDto } from './dto';
-import { Shop } from '@prisma/client';
+import { CreateProfileDto, EditProfileDto } from './dto';
+import { Profile, Shop } from '@prisma/client';
 
 @UseGuards(JwtGuard)
 @Controller('profile')
@@ -18,5 +18,10 @@ export class ProfileController {
   @Get()
   getProfile(@GetUser() shop: Shop) {
     return this.profileService.getProfile(shop);
+  }
+
+  @Patch('edit')
+  editProfile(@GetUser('profile') profile: Profile, @Body() dto: EditProfileDto) {
+    return this.profileService.editProfile(profile, dto);
   }
 }

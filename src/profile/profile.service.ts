@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreateProfileDto } from './dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -41,24 +42,38 @@ export class ProfileService {
   }
 
   async getProfile(shop: Shop) {
-    const profile: Profile = await this.prisma.profile.findUnique({
-      where: {
-        shop_id: shop.id,
-      },
-    });
-
     const data = {
       shop_owner: shop.shop_owner,
       shop_name: shop.shop_name,
       shop_cover_image: shop.shop_cover_image,
       email: shop.email,
       category: shop.category,
-      profile
-    }
+      profile: shop['profile'],
+    };
     return {
       statusCode: 200,
       message: 'shop profile',
       data,
     };
+  }
+
+  async editProfile(profile: Profile, dto: object) {
+    if (profile == null) throw new NotFoundException('shop has no profile');
+
+    const updatedProfile: Profile = await this.prisma.profile.update({
+      where: {
+        id: profile.id,
+      },
+      data: {
+        ...dto,
+      },
+    });
+
+    if (!updatedProfile)
+      throw new InternalServerErrorException(
+        'an error ocurred while updating your profile',
+      );
+
+    return updatedProfile;
   }
 }
