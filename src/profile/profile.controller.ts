@@ -21,7 +21,10 @@ export class ProfileController {
   }
 
   @Patch('edit')
-  editProfile(@GetUser('profile') profile: Profile, @Body() dto: EditProfileDto) {
+  editProfile(
+    @GetUser('profile') profile: Profile,
+    @Body() dto: EditProfileDto,
+  ) {
     return this.profileService.editProfile(profile, dto);
   }
 }

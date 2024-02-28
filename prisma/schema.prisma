@@ -24,7 +24,7 @@ model Shop {
   category         Category @default(SERVICES)
   socials          Social[]
   profile          Profile?
-  is_admin         Boolean  @default(false)
+  role             Role     @default(SHOP)
 }
 
 model Social {
@@ -48,6 +48,11 @@ model Profile {
   shop_location String?
   shop          Shop     @relation(fields: [shop_id], references: [id], onDelete: Cascade)
   shop_id       String   @unique
+}
+
+enum Role {
+  SHOP
+  ADMIN
 }
 
 enum Category {
