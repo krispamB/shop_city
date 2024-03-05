@@ -6,13 +6,17 @@ import {
 } from '@nestjs/common';
 import { CreateProfileDto } from './dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Profile, Shop } from '@prisma/client';
+import { Profile, Shop, Social } from '@prisma/client';
+import { URL } from 'url';
+import { socialNetworks } from 'src/common/socials';
+import { formattedSocials } from './types';
 
 @Injectable()
 export class ProfileService {
   constructor(private prisma: PrismaService) {}
 
   async createProfile(shop_id: string, dto: CreateProfileDto) {
+    const { social_links, ...goodData } = dto;
     const profileExists: Profile = await this.prisma.profile.findUnique({
       where: {
         shop_id,
@@ -24,9 +28,13 @@ export class ProfileService {
 
     const newProfile: Profile = await this.prisma.profile.create({
       data: {
-        ...dto,
+        ...goodData,
         shop_id,
       },
+    });
+
+    await this.prisma.social.createMany({
+      data: await this.sortSocialLinks(dto.social_links, shop_id),
     });
 
     if (!newProfile)
@@ -49,6 +57,7 @@ export class ProfileService {
       email: shop.email,
       category: shop.category,
       profile: shop['profile'],
+      socials: shop['socials'],
     };
     return {
       statusCode: 200,
@@ -75,5 +84,21 @@ export class ProfileService {
       );
 
     return updatedProfile;
+  }
+
+  //util
+  async sortSocialLinks(
+    socials: string[],
+    shop_id: string,
+  ): Promise<formattedSocials[]> {
+    return socials.map((link) => {
+      const url = new URL(link);
+
+      const social_network = socialNetworks[url.hostname];
+      if (!social_network)
+        return { social_network: 'Unknown Link', social_url: link, shop_id };
+
+      return { social_network, social_url: link, shop_id };
+    });
   }
 }

@@ -5,11 +5,10 @@ import { RolesDecorator } from 'src/common/decorators';
 @UseGuards(JwtGuard)
 @Controller('admin')
 export class AdminController {
-  
   @RolesDecorator('ADMIN')
   @UseGuards(RolesGuard)
   @Get()
   test() {
-    return 'This is an admin route'
+    return 'This is an admin route';
   }
 }
