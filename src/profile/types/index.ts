@@ -1,1 +1,1 @@
-export * from './formattedSocial.type'
+export * from './formattedSocial.type';

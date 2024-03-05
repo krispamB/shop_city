@@ -1,1 +1,1 @@
-export * from './allowedNetworks'
+export * from './allowedNetworks';

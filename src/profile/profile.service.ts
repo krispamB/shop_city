@@ -37,7 +37,6 @@ export class ProfileService {
       data: await this.sortSocialLinks(dto.social_links, shop_id),
     });
 
-
     if (!newProfile)
       throw new InternalServerErrorException(
         'an error ocurred while creating profile',
@@ -58,7 +57,7 @@ export class ProfileService {
       email: shop.email,
       category: shop.category,
       profile: shop['profile'],
-      socials: shop['socials']
+      socials: shop['socials'],
     };
     return {
       statusCode: 200,
@@ -92,7 +91,7 @@ export class ProfileService {
     socials: string[],
     shop_id: string,
   ): Promise<formattedSocials[]> {
-    return socials.map((link) => {  
+    return socials.map((link) => {
       const url = new URL(link);
 
       const social_network = socialNetworks[url.hostname];
