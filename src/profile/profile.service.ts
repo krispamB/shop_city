@@ -123,12 +123,14 @@ export class ProfileService {
           description: 'No description yet',
           shop_name: shop.shop_name,
           date: shop.created_at,
+          shop_id: shop.id
         });
       else
         data.push({
           description: shop.profile.description,
           shop_name: shop.shop_name,
           date: shop.created_at,
+          shop_id: shop.id
         });
     }
 
