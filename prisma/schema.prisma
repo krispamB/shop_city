@@ -24,6 +24,7 @@ model Shop {
   category         Category @default(SERVICES)
   socials          Social[]
   profile          Profile?
+  is_active        Boolean  @default(false)
   role             Role     @default(SHOP)
 }
 
