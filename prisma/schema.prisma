@@ -28,12 +28,12 @@ model Shop {
 }
 
 model Social {
-  id String @id @default(uuid())
-
   social_network String
   social_url     String
   shop           Shop   @relation(fields: [shop_id], references: [id], onDelete: Cascade)
   shop_id        String
+
+  @@id([shop_id, social_network])
 }
 
 model Profile {

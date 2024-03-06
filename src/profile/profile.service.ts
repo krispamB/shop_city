@@ -4,7 +4,7 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateProfileDto } from './dto';
+import { CreateProfileDto, EditProfileDto } from './dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Profile, Shop, Social } from '@prisma/client';
 import { URL } from 'url';
@@ -66,16 +66,36 @@ export class ProfileService {
     };
   }
 
-  async editProfile(profile: Profile, dto: object) {
+  async editProfile(profile: Profile, dto: EditProfileDto) {
     if (profile == null) throw new NotFoundException('shop has no profile');
+
+    const {social_links, ...data} = dto
+
+    if (social_links && social_links.length > 0) {
+      const sortedSocials = await this.sortSocialLinks(
+        social_links,
+        profile.shop_id,
+      );
+
+      for (const social of sortedSocials) {
+        await this.prisma.social.upsert({
+          where: {
+            shop_id_social_network: {
+              shop_id: social.shop_id,
+              social_network: social.social_network,
+            },
+          },
+          update: { social_url: social.social_url },
+          create: { ...social },
+        });
+      }
+    }
 
     const updatedProfile: Profile = await this.prisma.profile.update({
       where: {
         id: profile.id,
       },
-      data: {
-        ...dto,
-      },
+      data: data,
     });
 
     if (!updatedProfile)
