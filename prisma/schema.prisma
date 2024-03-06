@@ -56,8 +56,14 @@ enum Role {
 }
 
 enum Category {
-  CATEGORY_1
-  CATEGORY_2
-  CATEGORY_3
+  HOME
+  TECH
+  BEAUTY
+  WELLNESS
+  CAFE
+  FASHION
+  KIDS
+  STATIONARY
+  HYPERMARKET
   SERVICES
 }
