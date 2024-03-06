@@ -123,18 +123,38 @@ export class ProfileService {
           description: 'No description yet',
           shop_name: shop.shop_name,
           date: shop.created_at,
-          shop_id: shop.id
+          shop_cover_image: shop.shop_cover_image,
+          category: shop.category,
+          shop_id: shop.id,
         });
       else
         data.push({
           description: shop.profile.description,
           shop_name: shop.shop_name,
           date: shop.created_at,
-          shop_id: shop.id
+          shop_cover_image: shop.shop_cover_image,
+          category: shop.category,
+          shop_id: shop.id,
         });
     }
 
     return data;
+  }
+
+  async getShopDetails(shop_id: string) {
+    const shop = await this.prisma.shop.findUnique({
+      where: { id: shop_id },
+      include: {
+        profile: true,
+        socials: true,
+      },
+    });
+
+    if (!shop) throw new NotFoundException('Shop does not exist');
+
+    const { hash, ...safeData } = shop;
+
+    return safeData;
   }
 
   //util
