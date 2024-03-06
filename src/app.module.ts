@@ -8,6 +8,7 @@ import { PrismaService } from './prisma/prisma.service';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { ProfileModule } from './profile/profile.module';
 import { AdminModule } from './admin/admin.module';
+import { ClientModule } from './client/client.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AdminModule } from './admin/admin.module';
     CloudinaryModule,
     ProfileModule,
     AdminModule,
+    ClientModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

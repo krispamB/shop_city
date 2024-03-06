@@ -9,7 +9,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { Profile, Shop, Social } from '@prisma/client';
 import { URL } from 'url';
 import { socialNetworks } from 'src/common/socials';
-import { formattedSocials } from './types';
+import { ActiveShop, formattedSocials } from './types';
 
 @Injectable()
 export class ProfileService {
@@ -69,7 +69,7 @@ export class ProfileService {
   async editProfile(profile: Profile, dto: EditProfileDto) {
     if (profile == null) throw new NotFoundException('shop has no profile');
 
-    const {social_links, ...data} = dto
+    const { social_links, ...data } = dto;
 
     if (social_links && social_links.length > 0) {
       const sortedSocials = await this.sortSocialLinks(
@@ -104,6 +104,35 @@ export class ProfileService {
       );
 
     return updatedProfile;
+  }
+
+  async getActiveShops() {
+    const activeShops = await this.prisma.shop.findMany({
+      where: { is_active: true },
+      include: {
+        profile: true,
+      },
+    });
+
+    if (activeShops.length < 1) return activeShops;
+
+    let data: ActiveShop[] = [];
+    for (const shop of activeShops) {
+      if (!shop.profile)
+        data.push({
+          description: 'No description yet',
+          shop_name: shop.shop_name,
+          date: shop.created_at,
+        });
+      else
+        data.push({
+          description: shop.profile.description,
+          shop_name: shop.shop_name,
+          date: shop.created_at,
+        });
+    }
+
+    return data;
   }
 
   //util
