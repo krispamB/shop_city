@@ -1,6 +1,8 @@
 export type ActiveShop = {
   description: string
   shop_name: string
-  date: Date
+  date: Date,
+  shop_cover_image: string,
+  category: string
   shop_id: string
 }
