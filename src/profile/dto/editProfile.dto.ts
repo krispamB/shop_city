@@ -1,6 +1,6 @@
 import {
   IsInt,
-  IsNotEmpty,
+  IsUrl,
   IsString,
   IsArray,
   IsOptional,
@@ -26,4 +26,12 @@ export class EditProfileDto {
   @IsOptional()
   @IsString()
   shop_location: string;
+
+  @IsUrl(
+    { require_protocol: true },
+    { each: true, message: 'Url must be of the the format https://foo.com' },
+  )
+  @IsArray()
+  @IsOptional()
+  social_links: string[];
 }
