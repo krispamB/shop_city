@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ProfileService } from 'src/profile/profile.service';
 
 @Controller('client')
@@ -6,8 +6,8 @@ export class ClientController {
   constructor(private profileService: ProfileService) {}
 
   @Get('active')
-  getActiveShops() {
-    return this.profileService.getActiveShops();
+  getActiveShops(@Query('q') query: string) {
+    return this.profileService.getActiveShops(query);
   }
 
   @Get('shop_details/:shop_id')
