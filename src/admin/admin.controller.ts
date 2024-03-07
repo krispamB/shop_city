@@ -1,19 +1,20 @@
-import { Controller, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { JwtGuard, RolesGuard } from 'src/common/Guards';
 import { RolesDecorator } from 'src/common/decorators';
 import { AdminService } from './admin.service';
 import { ParamsDto } from './dto';
+import { ProfileService } from 'src/profile/profile.service';
 
 @RolesDecorator('ADMIN')
 @UseGuards(RolesGuard)
 @UseGuards(JwtGuard)
 @Controller('admin')
 export class AdminController {
-  constructor(private adminService: AdminService) {}
+  constructor(private adminService: AdminService, private profileService: ProfileService) {}
 
-  @Get()
-  test() {
-    return 'this is an admin route';
+  @Get('all_shops')
+  getAllShops(@Query('q') query: string) {
+    return this.profileService.getAllShops(query)
   }
 
   @Patch('active/:shop_id')

@@ -168,7 +168,21 @@ export class ProfileService {
     return safeData;
   }
 
-  search(query: string) {}
+  async getAllShops(query: string) {
+    const keywords = query ? query : '';
+
+    const activeShops = await this.prisma.shop.findMany({
+      where: {
+        shop_name: {
+          contains: keywords,
+          mode: 'insensitive',
+        },
+      },
+    });
+
+
+    return activeShops
+  }
 
   //util
   async sortSocialLinks(
