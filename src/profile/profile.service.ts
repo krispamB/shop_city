@@ -56,6 +56,7 @@ export class ProfileService {
       shop_cover_image: shop.shop_cover_image,
       email: shop.email,
       category: shop.category,
+      is_active: shop.is_active,
       profile: shop['profile'],
       socials: shop['socials'],
     };
@@ -133,6 +134,7 @@ export class ProfileService {
           date: shop.created_at,
           shop_cover_image: shop.shop_cover_image,
           category: shop.category,
+          shop_location: 'No location yet',
           shop_id: shop.id,
         });
       else
@@ -142,6 +144,7 @@ export class ProfileService {
           date: shop.created_at,
           shop_cover_image: shop.shop_cover_image,
           category: shop.category,
+          shop_location: shop.profile.shop_location,
           shop_id: shop.id,
         });
     }
