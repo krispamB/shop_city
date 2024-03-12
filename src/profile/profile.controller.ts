@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Patch, Post, UseGuards } from '@nestjs/common';
 import { JwtGuard } from 'src/common/Guards';
 import { ProfileService } from './profile.service';
 import { GetUser } from 'src/common/decorators';
@@ -26,5 +26,10 @@ export class ProfileController {
     @Body() dto: EditProfileDto,
   ) {
     return this.profileService.editProfile(profile, dto);
+  }
+
+  @Delete('delete-shop')
+  deleteShop(@GetUser() shop: Shop) {
+    return this.profileService.deleteAccount(shop.id)
   }
 }
