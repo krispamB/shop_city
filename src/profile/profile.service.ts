@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { CreateProfileDto, EditProfileDto } from './dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Profile, Shop, Social } from '@prisma/client';
+import { Category, Profile, Shop, Social } from '@prisma/client';
 import { URL } from 'url';
 import { socialNetworks } from 'src/common/socials';
 import { ActiveShop, formattedSocials } from './types';
@@ -180,8 +180,16 @@ export class ProfileService {
       },
     });
 
+    return activeShops;
+  }
 
-    return activeShops
+  async categoryFilter(category: Category) {
+    return await this.prisma.shop.findMany({
+      where: {
+        category,
+        is_active: true,
+      },
+    });
   }
 
   //util
