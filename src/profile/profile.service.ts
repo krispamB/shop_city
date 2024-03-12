@@ -192,6 +192,29 @@ export class ProfileService {
     });
   }
 
+  async deleteAccount(shop_id: string) {
+    const shopFound: Shop = await this.prisma.shop.findUnique({
+      where: {
+        id: shop_id,
+      },
+    });
+
+    if (!shopFound) throw new NotFoundException('shop not found');
+
+    const deletedShop = await this.prisma.shop.delete({
+      where: {
+        id: shopFound.id,
+      },
+    });
+
+    if (!deletedShop)
+      throw new InternalServerErrorException(
+        'an error ocurred while deleting shop',
+      );
+
+    return `${deletedShop.shop_name} removed successfully`;
+  }
+
   //util
   async sortSocialLinks(
     socials: string[],
