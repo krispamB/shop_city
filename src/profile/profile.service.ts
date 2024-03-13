@@ -136,6 +136,7 @@ export class ProfileService {
           category: shop.category,
           shop_location: 'No location yet',
           shop_id: shop.id,
+          shop_number: null,
         });
       else
         data.push({
@@ -146,6 +147,7 @@ export class ProfileService {
           category: shop.category,
           shop_location: shop.profile.shop_location,
           shop_id: shop.id,
+          shop_number: shop.profile.shop_number,
         });
     }
 
